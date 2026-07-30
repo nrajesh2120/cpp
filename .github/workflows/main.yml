@@ -1,0 +1,38 @@
+name: Black Duck C/C++ Scan
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  blackduck-cpp:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install blackduck-c-cpp
+        run: |
+          python -m pip install --upgrade pip
+          pip install blackduck-c-cpp
+
+      - name: Run Black Duck C/C++ Scan
+        env:
+          BD_HUB_TOKEN: ${{ secrets.BLACKDUCK_TOKEN }}
+        run: |
+          cd data_structures-II/06-BST
+
+          blackduck-c-cpp \
+            -bc "make" \
+            -d "$(pwd)" \
+            -proj "${{ github.event.repository.name }}" \
+            -vers "${{ github.ref_name }}" \
+            -bd "https://expressonboarding.app.blackduck.com"
