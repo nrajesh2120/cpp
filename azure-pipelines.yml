@@ -1,0 +1,35 @@
+# C/C++ with GCC
+# Build your C/C++ project with GCC using make.
+# Add steps that publish test results, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/c-cpp/gcc
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+#variables:
+#- group: Polaris_Evan
+variables:
+ - group: SCA_Evan
+
+steps:
+- task: JavaToolInstaller@0
+  inputs:
+    versionSpec: '17'
+    jdkArchitectureOption: 'x64'
+    jdkSourceOption: 'PreInstalled'
+
+- script: |
+    cd data_structures-II/06-BST
+    directory=$(pwd)
+    pip install blackduck-c-cpp
+    blackduck-c-cpp -bc "make" -d $directory -proj "Nirmal" -vers "cpp" -bd "https://expressonboarding.app.blackduck.com" -a $(AccessToken)
+  displayName: 'Install CPP tool'
+
+
+#- task: BlackDuckSecurityScan@2
+#  inputs:
+#    scanType: 'blackducksca'
+#    blackduckScaUrl: 'https://expressonboarding.app.blackduck.com/'
+#    blackduckScaToken: '$(AccessToken)'
