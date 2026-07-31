@@ -11,7 +11,7 @@ pool:
 #variables:
 #- group: Polaris_Evan
 variables:
- - group: SCA_Evan
+ - group: Nirmal_SCA
 
 steps:
 - task: JavaToolInstaller@0
